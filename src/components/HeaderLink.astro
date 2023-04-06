@@ -1,12 +1,16 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
+import { BASE_URL } from '../consts';
 
 type Props = HTMLAttributes<'a'>;
 
-const { href, class: className, ...props } = Astro.props;
+const { class: className, ...props } = Astro.props;
+let { href } = Astro.props;
 
 const { pathname } = Astro.url;
-const isActive = href === pathname || href === pathname.replace(/\/$/, '');
+
+const isActive = `/${BASE_URL}${href}` === pathname;
+if (typeof href === 'string' && href.indexOf('https') < 0) href = `/${BASE_URL}${href}`;
 ---
 
 <a href={href} class:list={[className, { active: isActive }]} {...props}>
